@@ -1,57 +1,56 @@
 package cs;
 
-import java.util.List;
 
+import cs.dao.CaseDAO;
+import cs.dao.CasetypeDAO;
 import cs.model.Case;
 import cs.model.Casetype;
 
 public class SuperPowerMain {
+    static CaseDAO caseDAO;
+    static CasetypeDAO casetypeDAO;
 
     public static void main(String[] argv) {
-        Singleton instance = Singleton.getInstance();
-        // init CaseType
-   new Casetype("Bangkok");
-      new Casetype("Thailand");
-      new Casetype("Asia");
+        caseDAO = new CaseDAO();
+        casetypeDAO = new CasetypeDAO();
+        casetypeDAO.printAllCasetype();
+        caseDAO.printAllCase();
+        addCaseToCasetype(1, "Thailand");
+        addCaseToCasetype(2, "Thailand");
+        addCaseToCasetype(5, "Asia");
+        addCaseToCasetype(6, "Singapore");
+        addCaseToCasetype(7, "Bangkok");
+        addCaseToCasetype(9, "Bangkok");
+        caseDAO.printAllCase();
+        
+        printAllCasetypePath("Bangkok");
+        printAllCasePath(1);
+       
 
-        // // add ratation
-        instance.findCasetypeByName("Asia").addRelation(instance.findCasetypeByName("Thailand"));
-        instance.findCasetypeByName("Thailand").addRelation(instance.findCasetypeByName("Bangkok"));
-        Case case1 = new Case(1, 20, "10/10/41", 2, "prayut", "sea");
-        Case case2 = new Case(2, 20, "10/10/41", 2, "prayut", "sea");
-        Case case3 = new Case(3, 1, "10/10/41", 2, "prayut", "sea");
-        Case case4 = new Case(4, 54, "10/10/41", 2, "prayut", "sea");
-         printAll(instance.casetypes);
-         System.out.println(instance.cases.size());
-        instance.findCasetypeByName("Asia").addCase(case1);
-         instance.findCasetypeByName("Asia").addCase(case2);
-         instance.findCasetypeByName("Thailand").addCase(case3);
-         instance.findCasetypeByName("Thailand").addCase(case4);
-         instance.findCasetypeByName("Asia").printall();
-         instance.findCasetypeByName("Asia").setName("ASSSSSIAS");
-         instance.findCasetypeByName("ASSSSSIAS").printall();
-         printAll(instance.casetypes);
-        // System.out.println(instance.findCasetypeByName("Asia").getCases().toString());
-        // System.out.println(instance.findCasetypeByName("Bangkok").getParentName());
-        // System.out.println(instance.findCasetypeByName("Thailand").getParentName());
-        // System.out.println(instance.findCasetypeByName("Asia").getParentName());
-        // String name = "Bangkok";
-        // while (true) {
-        //     System.out.println(instance.findCasetypeByName(name).getName() + " : "
-        //     + instance.findCasetypeByName(name).getParentName());
-        //     name = instance.findCasetypeByName(name).getParentName();
-        //     if(name == null) break;
-        //     System.out.println("name:"+name);
-        
-        // }
-        
     }
 
-    public static void printAll(List<Casetype> _casetypes) {
-
-        _casetypes.stream().forEach(obj -> {
-            System.out.println(obj.getName());
-        });
+    public static void addCaseToCasetype(int id, String name) {
+        casetypeDAO.findCasetypeByName(name).addCase(caseDAO.findCaseeById(id));
+    }
+    public static void printAllCasePath(int id){
+        Case target =caseDAO.findCaseeById(id);
+        System.out.print(" id: "+target.getId());
+        while (target.getInfectedFrom()!=0){
+            target = caseDAO.findCaseeById(target.getInfectedFrom());
+            System.out.print(" => " +" id: " +target.getId());
+        }
+  
     }
 
+    public static void printAllCasetypePath(String name) {
+
+        Casetype target = casetypeDAO.findCasetypeByName(name);
+        System.out.print(target.getName());
+        while (target.getParentObj()!=null){
+            target = target.getParentObj();
+            System.out.print(" => " +target.getName());
+        }
+  
+    }
+    // }
 }

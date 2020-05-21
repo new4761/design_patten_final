@@ -1,13 +1,11 @@
 package cs.model;
 
-import cs.Singleton;
-
 public class Case {
-    Singleton instance = Singleton.getInstance();
+
     private int id;
     private int age;
     private String date;
-    private String casetype;
+    private Casetype casetype;
     private int infectedFrom;
     private String desc;
     private String location;
@@ -52,15 +50,20 @@ public class Case {
         this.desc = desc;
     }
 
-   
-
-
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Casetype getCasetype() {
+        return casetype;
+    }
+
+    public void setCasetype(Casetype casetype) {
+        this.casetype = casetype;
     }
 
     public Case(int id, int age, String date, int infectedFrom, String desc, String location) {
@@ -70,25 +73,26 @@ public class Case {
         this.infectedFrom = infectedFrom;
         this.desc = desc;
         this.location = location;
-        instance.addCases(this);
+        this.casetype = null;
+
     }
 
-    public Case(int id, int age, String date,  String desc, String location) {
+    public Case(int id, int age, String date, String desc, String location) {
         this.id = id;
         this.age = age;
         this.date = date;
         this.desc = desc;
         this.location = location;
         this.infectedFrom = 0;
-        instance.addCases(this);
+        this.casetype = null;
+
     }
 
-    public String getCasetype() {
-        return casetype;
-    }
+    @Override
+    public String toString() {
 
-    public void setCasetype(String casetype) {
-        this.casetype = casetype;
+        String casetypeText = (this.casetype == null) ? "Unknow":this.casetype.getName();
+        return "id:" + this.id + " Age: " + this.age + " Infected date: " + this.date + " Desc: " + this.desc
+                + " Location: " + this.location + " infected from caseID:" + this.infectedFrom +" Casetype: "+ casetypeText;
     }
-
 }
