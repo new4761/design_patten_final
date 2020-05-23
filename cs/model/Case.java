@@ -4,6 +4,7 @@ public class Case {
 
     private int id;
     private int age;
+    private char gender;
     private String date;
     private Casetype casetype;
     private int infectedFrom;
@@ -66,18 +67,19 @@ public class Case {
         this.casetype = casetype;
     }
 
-    public Case(int id, int age, String date, int infectedFrom, String desc, String location) {
+    public Case(int id, int age, String date, int infectedFrom, String desc, String location,char gender) {
         this.id = id;
         this.age = age;
         this.date = date;
         this.infectedFrom = infectedFrom;
         this.desc = desc;
         this.location = location;
+        this.gender = gender;
         this.casetype = null;
 
     }
 
-    public Case(int id, int age, String date, String desc, String location) {
+    public Case(int id, int age, String date, String desc, String location,char gender) {
         this.id = id;
         this.age = age;
         this.date = date;
@@ -85,14 +87,31 @@ public class Case {
         this.location = location;
         this.infectedFrom = 0;
         this.casetype = null;
+        this.gender = gender;
+
+    }
+
+    public Case() {
+
+        this.infectedFrom = 0;
+        this.casetype = null;
 
     }
 
     @Override
     public String toString() {
+        String infectedFromText = (this.infectedFrom == 0) ? "Unknow" : Integer.toString(this.infectedFrom);
+        String casetypeText = (this.casetype == null) ? "Unknow" : this.casetype.getName();
+        return "id:" + this.id + " Age: " + this.age +" Gender: "+this.gender + " Infected date: " + this.date + " Desc: " + this.desc
+                + " Location: " + this.location + " infected from caseId : " + infectedFromText + " Casetype: "
+                + casetypeText;
+    }
 
-        String casetypeText = (this.casetype == null) ? "Unknow":this.casetype.getName();
-        return "id:" + this.id + " Age: " + this.age + " Infected date: " + this.date + " Desc: " + this.desc
-                + " Location: " + this.location + " infected from caseID:" + this.infectedFrom +" Casetype: "+ casetypeText;
+    public char getGender() {
+        return gender;
+    }
+
+    public void setGender(char gender) {
+        this.gender = gender;
     }
 }
