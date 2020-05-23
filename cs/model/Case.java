@@ -1,6 +1,9 @@
 package cs.model;
 
-public class Case {
+
+// model data only override to string with handle null for display not use any patten is this onlu pojo
+// on casetype get objref instead name for easy handle and to be obj reattion
+public class Case { 
 
     private int id;
     private int age;

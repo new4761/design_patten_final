@@ -5,6 +5,8 @@ import java.util.List;
 
 import cs.model.Case;
 
+
+// DAO Patten of Case but try to be database  some method use for show data only like try to select 
 public class CaseDAO {
     private List<Case> cases;
 
@@ -33,13 +35,13 @@ public class CaseDAO {
         addCase(case9);
         addCase(case10);
     }
-
+  // want to be select  all in case
     public void printAllCase() {
         this.cases.stream().forEach(obj -> {
             System.out.println(obj.toString());
         });
     }
-
+  // want to be select with con
     public void printCasePathChildToParent(int id) {
         Case target = findCaseById(id);
         System.out.print(" Case id: " + target.getId());
@@ -50,7 +52,7 @@ public class CaseDAO {
         System.out.println();
 
     }
-
+  // want to be select with con
     public void printCasePathParentToChild(int id) {
 
         this.cases.stream().forEach(obj -> {
@@ -64,7 +66,7 @@ public class CaseDAO {
 
         // System.out.print("new line from id:" + id);
     }
-
+  // want to be delete
     public void removeCaseeById(int id) {
         Case target = findCaseById(id);
         if (target != null) {
@@ -78,7 +80,7 @@ public class CaseDAO {
             System.out.println("Not have any CaseID:" + id + "on database");
         }
     }
-
+  // want to be select
     public Case findCaseById(int id) {
         return this.cases.stream().filter(obj -> obj.getId() == id).findFirst().orElse(null);
     }
@@ -86,12 +88,13 @@ public class CaseDAO {
     public List<Case> getAllCases() {
         return cases;
     }
-
+  // want to be insert
     public void addCase(Case _case) {
         this.cases.add(_case);
 
     }
 
+    // Bad update bc is not Real Database
     public void updateCaseByID(int id, Case _case) {
         Case target = findCaseById(id);
         if (target != null) {

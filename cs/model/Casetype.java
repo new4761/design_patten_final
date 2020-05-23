@@ -3,6 +3,12 @@ package cs.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Use design patterns
+ - Composite
+ - Chain of Responsibility 
+ 
+ have some print method for display  and have parentObj for can run back from child to parent
+ */
 public class Casetype {
 
     private String name;

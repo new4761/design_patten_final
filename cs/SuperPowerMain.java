@@ -7,12 +7,31 @@ import cs.dao.CasetypeDAO;
 import cs.model.Case;
 import cs.model.Casetype;
 
+/* 60050143 kanisorn siripatkerdpong 
+
+
+Use design patterns
+ - Composite
+ - Chain of Responsibility
+Use DAO patten for demo database  and make something like querry Data
+don't create mvc patten bc want don't use real db (use DAO to database)
+
+All Class in main is do someting like client call and querry but DAO can't see other data 
+on other DAO (IF is database is can do something like "SELECET WHEHE " or " UPDDATE WHERE")
+that why on client (main class /this class ) have some method call though model (not mvc better way)
+on main show only some method is good for use (Easy way to input/display in textbase)
+
+Rate my selfcode 4/10 T T
+
+
+*/
 public class SuperPowerMain {
     static CaseDAO caseDAO;
     static CasetypeDAO casetypeDAO;
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] argv) {
+        // init some data for demo 
         caseDAO = new CaseDAO();
         casetypeDAO = new CasetypeDAO();
         casetypeDAO.printAllCasetype();
@@ -23,10 +42,9 @@ public class SuperPowerMain {
         setCasetypeByID(6, "Singapore");
         setCasetypeByID(7, "Bangkok");
         setCasetypeByID(9, "Bangkok");
-        // caseDAO.printAllCase();
-        // caseDAO.printCasePathParentToChild(5);
-        // casetypeDAO.printCasetypePathChildToParent("Singapore");
         int choice;
+
+        // do loop for use input 
         do {
             System.out.println("Input number for pick command");
             System.out.println("1. Newcase");
@@ -37,21 +55,60 @@ public class SuperPowerMain {
             System.out.println("6. Remvoe Casetype ByName");
             System.out.println("7. Show  CasePath ByID");
             System.out.println("8. Show  AllCase in Casetype ByName");
+            System.out.println("9. Show AllCase in database");
+            System.out.println("10. Show  AllCasetype in database");
             System.out.println("0. Exit()");
             choice = sc.nextInt();
             switch (choice) {
-                
+                case 1:
+                    createNewCase();
+                    break;
+                case 2:
+                    createNewCasetype();
+                    break;
+                case 3:
+                    editCaseData();
+                    break;
+                case 4:
+                    editCasetypeData();
+                    break;
+                case 5:
+                    removeCaseByid();
+                    break;
+                case 6:
+                    removeCasetypeByName();
+                    break;
+                case 7:
+                    printCasePath();
+                    break;
+                case 8:
+                    System.out.print("Insert Casetype Name: ");
+                    printAllCaseinCasetypeByName(sc.next());
+                    break;
+                    case 9:
+                    System.out.println("**Show all case in database**");
+                    caseDAO.printAllCase();
+                    break;
+                    case 10:
+                    System.out.println("**Show all casetype in database**");
+                  casetypeDAO.printAllCasetype();
+                    break;
             }
-        } while (choice == 0);
+        } while (choice != 0);
 
     }
 
-    public static void removeCaseByid(int id) {
+    // ***** Method for Client can Do insert update delelet select" (Demo some) *****
+    public static void removeCaseByid() {
+        System.out.println("**RemoveCaseByid**");
         System.out.print("Insert CaseId: ");
         caseDAO.removeCaseeById(sc.nextInt());
     }
 
-    public static void reomveCasetypeByName(int id, String name) {
+    public static void removeCasetypeByName() {
+        System.out.println("**RemoveCasetypeByName**");
+        System.out.print("Insert Casetype Name: ");
+        String name = sc.next();
         Casetype target = casetypeDAO.findCasetypeByName(name);
         if (target != null) {
             caseDAO.getAllCases().stream().forEach(obj -> {
@@ -79,6 +136,7 @@ public class SuperPowerMain {
     }
 
     public static void createNewCase() {
+        System.out.println("**CreateNewCase**");
         Case _case = new Case();
         System.out.println("New Case");
         System.out.print("Insert CaseId: ");
@@ -119,6 +177,7 @@ public class SuperPowerMain {
     }
 
     public static void createNewCasetype() {
+        System.out.println("**CreateNewCasetype**");
         System.out.println("New Casetype");
         System.out.print("Insert Name: ");
         Casetype _casetype = new Casetype(sc.next());
@@ -127,7 +186,8 @@ public class SuperPowerMain {
     }
 
     public static void editCaseData() {
-        System.out.println("Edit CaseData");
+        System.out.println("**Edit CaseData**");
+        System.out.print("Insert CaseId: ");
         int id = sc.nextInt();
         Case oldcase = caseDAO.findCaseById(id);
         Case newCase = new Case();
@@ -167,7 +227,8 @@ public class SuperPowerMain {
     }
 
     public static void editCasetypeData() {
-        System.out.println("Edit CasetypeData");
+        System.out.println("**Edit CasetypeData**");
+        System.out.print("Insert Casetype name: ");
         String name = sc.next();
         Casetype target = casetypeDAO.findCasetypeByName(name);
         System.out.println("1. to Edit name");
@@ -188,17 +249,26 @@ public class SuperPowerMain {
                 target.addRelation(casetypeDAO.findCasetypeByName(sc.next()));
                 break;
             case 3:
-                    System.out.println("Current Relation");
-                    target.getRelation().stream().forEach(obj -> {
-                        System.out.println(obj.getName());
-                    });
-                    System.out.print("Remove  Relation By name:");
-                    target.removeRelationByname(casetypeDAO.findCasetypeByName(sc.next()).getName());
-            }
+                System.out.println("Current Relation");
+                target.getRelation().stream().forEach(obj -> {
+                    System.out.println(obj.getName());
+                });
+                System.out.print("Remove  Relation By name:");
+                target.removeRelationByname(casetypeDAO.findCasetypeByName(sc.next()).getName());
+                break;
+
         }
-    
+    }
+
+    public static void printCasePath() {
+        System.out.println("**PrintCasePath**");
+        System.out.print("Insert CaseId: ");
+        int id = sc.nextInt();
+        caseDAO.printCasePathChildToParent(id);
+    }
 
     public static void printAllCaseinCasetypeByName(String name) {
+        System.out.println("**PrintAllCaseinCasetypeByName**");
         Casetype target = casetypeDAO.findCasetypeByName(name);
         if (target != null) {
 
@@ -216,6 +286,6 @@ public class SuperPowerMain {
         target.getRelation().stream().forEach(obj -> {
             printAllCaseinCasetypeByNameInPath(obj.getName());
         });
-    
+
     }
 }
